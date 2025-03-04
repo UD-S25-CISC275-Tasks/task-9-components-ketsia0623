@@ -39,7 +39,7 @@ export function findQuestion(
  * with the given `id`.
  */
 export function removeQuestion(questions: Question[], id: number): Question[] {
-    return [];
+    return questions.filter((q) => q.id !== id);
 }
 
 /***
@@ -98,7 +98,12 @@ export function toCSV(questions: Question[]): string {
  * making the `text` an empty string, and using false for both `submitted` and `correct`.
  */
 export function makeAnswers(questions: Question[]): Answer[] {
-    return [];
+    return questions.map((question) => ({
+        questionId: question.id,
+        text: "",
+        submitted: false,
+        correct: false,
+    }));
 }
 
 /***
@@ -106,7 +111,10 @@ export function makeAnswers(questions: Question[]): Answer[] {
  * each question is now published, regardless of its previous published status.
  */
 export function publishAll(questions: Question[]): Question[] {
-    return [];
+    return questions.map((q) => ({
+        ...q,
+        published: true,
+    }));
 }
 
 /***
@@ -114,7 +122,11 @@ export function publishAll(questions: Question[]): Question[] {
  * are the same type. They can be any type, as long as they are all the SAME type.
  */
 export function sameType(questions: Question[]): boolean {
-    return false;
+    if (questions.length === 0) {
+        return true;
+    }
+    const one = questions[0].type;
+    return questions.every((q) => q.type === one);
 }
 
 /***
@@ -129,6 +141,17 @@ export function addNewQuestion(
     type: QuestionType,
 ): Question[] {
     return [];
+    /*
+    const emptyQ = {
+        id,
+        name,
+        type,
+        options: [],
+        points: 0,
+        published: false,
+    };
+    return [...questions, emptyQ];
+    */
 }
 
 /***
@@ -141,7 +164,11 @@ export function renameQuestionById(
     targetId: number,
     newName: string,
 ): Question[] {
-    return [];
+    return questions.map((q) =>
+        q.id === targetId ?
+            { ...q, name: newName } // Update name while keeping other properties unchanged
+        :   q,
+    );
 }
 
 /***
@@ -218,4 +245,13 @@ export function duplicateQuestionInArray(
     newId: number,
 ): Question[] {
     return [];
+    /*
+
+    const indices = questions.findIndex(question) => question.id === targetId);
+    return indices === -1 ? questions : {
+        [
+            ...questions.slice(0, indices + 1),
+        ]
+    }
+    */
 }
