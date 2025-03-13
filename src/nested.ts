@@ -134,23 +134,23 @@ export function sameType(questions: Question[]): boolean {
  * except that a blank question has been added onto the end. Reuse the `makeBlankQuestion`
  * you defined in the `objects.ts` file.
  */
-export function addNewQuestion(): Question[] {
-//questions: Question[],
-//id: number,
-//name: string,
-//type: QuestionType,
-    return [];
-    /*
+export function addNewQuestion(
+    questions: Question[],
+    id: number,
+    name: string,
+    type: QuestionType,
+): Question[] {
     const emptyQ = {
         id,
         name,
         type,
+        body: "",
+        expected: "",
         options: [],
-        points: 0,
+        points: 1,
         published: false,
     };
     return [...questions, emptyQ];
-    */
 }
 
 /***
@@ -238,18 +238,22 @@ export function editOption(
  * the duplicate inserted directly after the original question. Use the `duplicateQuestion`
  * function you defined previously; the `newId` is the parameter to use for the duplicate's ID.
  */
-export function duplicateQuestionInArray(): Question[] {
-//questions: Question[],
-//targetId: number,
-//newId: number,
-    return [];
-    /*
+export function duplicateQuestionInArray(
+    questions: Question[],
+    targetId: number,
+    newId: number,
+): Question[] {
+    let ind = questions.findIndex((question) => question.id === targetId);
 
-    const indices = questions.findIndex(question) => question.id === targetId);
-    return indices === -1 ? questions : {
-        [
-            ...questions.slice(0, indices + 1),
-        ]
-    }
-    */
+    return ind === -1 ? questions : (
+            [
+                ...questions.slice(0, ind + 1),
+                {
+                    ...questions[ind],
+                    id: newId,
+                    name: `Copy of ${questions[ind].name}`,
+                },
+                ...questions.slice(ind + 1),
+            ]
+        );
 }
